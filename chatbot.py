@@ -1,9 +1,14 @@
 #diccionario de respuestas
-respuestas = {
-    "hola": "¡Hola! ¿En qué puedo ayudarte?",
-    "cómo estás": "Estoy bien, gracias por preguntar",
-    "adiós": "¡Hasta luego! Que tengas un buen día"
-}
+import csv
+
+respuestas = {}
+
+with open("datosdechat.csv", "r") as archivo:
+    lector = csv.DictReader(archivo)
+    for filas in lector:
+        print(filas)
+        respuestas[filas["pregunta"]] = filas["respuesta"]
+
 
 #funcion para obtener la respuesta
 def obtener_respuesta(mensaje):
@@ -11,7 +16,10 @@ def obtener_respuesta(mensaje):
     if mensaje in respuestas:
         return respuestas[mensaje]
     else:
-        return "lo siento, no entiendo esa pregunta"
+        with open("salida.csv", "w", newline="") as archivo:
+         escritor = csv.writer(archivo)
+         escritor.writerow([mensaje, "Pregunta por responder"])  # Escribir encabezados
+    return "lo siento, no entiendo esa pregunta"
     
 #Bucle de conversación
 print("¡Hola! Soy un chatbot, Escribe 'salir' para terminar la conversación.")
@@ -22,3 +30,6 @@ while True:
         break
     respuesta = obtener_respuesta(usuario)
     print("Chatbot:", respuesta)
+
+import csv          
+
